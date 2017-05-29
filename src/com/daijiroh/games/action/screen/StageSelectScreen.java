@@ -15,7 +15,7 @@ public class StageSelectScreen extends AbstractScreen {
 	/** ステージ名称 */
 	private static final String STAGE1_NAME = "Stage A（仮）";
 	/** 遷移先画面クラス */
-	private static final String STAGE1_CLAZZ = "";
+	private static final String STAGE1_CLAZZ = "com.daijiroh.games.action.screen.TestStageScreen";
 	/** ステージ表示：x座標 */
 	private static final int STAGE1_X = 10;
 	/** ステージ表示：y座標 */
