@@ -222,22 +222,40 @@ public class StageSelectScreen extends AbstractScreen {
 				e.printStackTrace();
 			}
 
-		// 下方向キー押下時
-		} else if (controller.isKeyDown()) {
-			controller.setKeyDown(false);
+		// 右方向キー押下時
+		} else if (controller.isKeyRight()) {
+			controller.setKeyRight(false);
 			if ((select + 1) > (STAGE_LIST.size() - 1)) {
 				select = 0;
 			} else {
 				select++;
 			}
 
-		// 上方向キー押下時
-		} else if (controller.isKeyUp()) {
-			controller.setKeyUp(false);
+		// 左方向キー押下時
+		} else if (controller.isKeyLeft()) {
+			controller.setKeyLeft(false);
 			if ((select - 1) < 0) {
 				select = STAGE_LIST.size() - 1;
 			} else {
 				select--;
+			}
+
+		// 上方向キー押下時
+		} else if (controller.isKeyUp()) {
+			controller.setKeyUp(false);
+			if ((select - 4) < 0) {
+				select += 4;
+			} else {
+				select -= 4;
+			}
+
+		// 下方向キー押下時
+		} else if (controller.isKeyDown()) {
+			controller.setKeyDown(false);
+			if ((select + 4) > (STAGE_LIST.size() - 1)) {
+				select -= 4;
+			} else {
+				select += 4;
 			}
 		}
 	}
