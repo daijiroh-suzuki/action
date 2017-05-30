@@ -20,6 +20,8 @@ public class Player extends Task {
 
 	/** 空中フラグ */
 	private boolean aerial;
+	/** 攻撃フラグ */
+	private boolean attack;
 
 	/**
 	 * コンストラクタ
@@ -40,6 +42,7 @@ public class Player extends Task {
 		this.width = 31;                      // 幅
 		this.height = 31;                     // 高さ
 		this.aerial = false;                  // 空中フラグ
+		this.attack = false;                  // 攻撃フラグ
 	}
 
 	/**
@@ -60,16 +63,17 @@ public class Player extends Task {
 
 		// Bボタン押下時
 		if (GameStatus.controller.isKeyB()) {
-			vy = 10;
+			vy = -10;
+			aerial = true;
 		}
 
 		// 重力加速度
 		vy += 1;
 
 		// 床判定
-		if (y <= 240) {
+		if (y >= 240) {
 			y = 240;
-			vy = 0;
+			aerial = false;
 		}
 
 		// 座標を更新
@@ -83,7 +87,11 @@ public class Player extends Task {
 	@Override
 	public void draw(Graphics g) {
 
-		g.setColor(Color.BLUE);
+		if (aerial) {
+			g.setColor(Color.RED);
+		} else {
+			g.setColor(Color.BLUE);
+		}
 		g.fillRect(x, y, width, height);
 	}
 
@@ -187,5 +195,39 @@ public class Player extends Task {
 	 */
 	public int getHeight() {
 		return height;
+	}
+
+	/**
+	 * 空中フラグを設定する
+	 *
+	 * @param aerial
+	 */
+	public void setAerial(boolean aerial) {
+		this.aerial = aerial;
+	}
+	/**
+	 * 空中フラグを取得する
+	 *
+	 * @return
+	 */
+	public boolean isAerial() {
+		return aerial;
+	}
+
+	/**
+	 * 攻撃フラグを設定する
+	 *
+	 * @param attack
+	 */
+	public void setAttack(boolean attack) {
+		this.attack = attack;
+	}
+	/**
+	 * 攻撃フラグを取得する
+	 *
+	 * @return
+	 */
+	public boolean isAttack() {
+		return attack;
 	}
 }
