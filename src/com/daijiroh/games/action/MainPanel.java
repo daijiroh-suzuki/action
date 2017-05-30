@@ -8,16 +8,16 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
-import com.daijiroh.games.action.controller.BasicController;
-import com.daijiroh.games.action.screen.AbstractScreen;
+import com.daijiroh.games.action.screen.BaseScreen;
 import com.daijiroh.games.action.screen.TitleScreen;
+import com.daijiroh.games.action.share.status.GameStatus;
 
 public class MainPanel extends JPanel implements Runnable {
 
 	/** パネルの幅 */
-	public static final int WIDTH = 640;
+	private static final int WIDTH = 640;
 	/** パネルの高さ */
-	public static final int HEIGHT = 480;
+	private static final int HEIGHT = 480;
 
 	/** ダブルバッファリング用 Graphics */
 	private Graphics dbg;
@@ -27,11 +27,8 @@ public class MainPanel extends JPanel implements Runnable {
 	/** ゲームループ */
 	private Thread gameLoop;
 
-	/** コントローラーオブジェクト */
-	private BasicController controller;
-
 	/** 画面オブジェクト */
-	private AbstractScreen screen;
+	private BaseScreen screen;
 
 	/**
 	 * コンストラクタ
@@ -43,11 +40,8 @@ public class MainPanel extends JPanel implements Runnable {
 		// フォーカスを設定
 		setFocusable(true);
 
-		// コントローラーオブジェクトを生成
-		controller = new BasicController();
-
 		// キーリスナーの追加
-		addKeyListener(controller);
+		addKeyListener(GameStatus.controller);
 
 		// ゲームループ開始
 		gameLoop = new Thread(this);
@@ -61,7 +55,7 @@ public class MainPanel extends JPanel implements Runnable {
 	public void run() {
 
 		// タイトル画面を生成
-		screen = new TitleScreen(controller);
+		screen = new TitleScreen();
 
 		while (true) {
 			// ゲーム状態を更新
@@ -89,7 +83,7 @@ public class MainPanel extends JPanel implements Runnable {
 		screen.update();
 
 		// 画面遷移
-		AbstractScreen nextScreen = screen.getNextScreen();
+		BaseScreen nextScreen = screen.getNextScreen();
 		if (nextScreen != null) {
 			screen = nextScreen;
 		}

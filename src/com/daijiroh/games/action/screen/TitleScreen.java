@@ -3,9 +3,9 @@ package com.daijiroh.games.action.screen;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import com.daijiroh.games.action.controller.BasicController;
+import com.daijiroh.games.action.share.status.GameStatus;
 
-public class TitleScreen extends AbstractScreen {
+public class TitleScreen extends BaseScreen {
 
 	/** タイトル：x座標 */
 	private static final int TITLE_X = 250;
@@ -31,8 +31,7 @@ public class TitleScreen extends AbstractScreen {
 	 *
 	 * @param controller
 	 */
-	public TitleScreen(BasicController controller) {
-		super(controller);
+	public TitleScreen() {
 		frameCount = 0;
 	}
 
@@ -43,9 +42,9 @@ public class TitleScreen extends AbstractScreen {
 	public void update() {
 
 		// Enterキー押下時に次画面へ遷移
-		if (controller.isKeyEnter()) {
-			controller.setKeyEnter(false);
-			nextScreen = new MenuScreen(controller);
+		if (GameStatus.controller.isKeyEnter()) {
+			GameStatus.controller.setKeyEnter(false);
+			nextScreen = new MenuScreen();
 		} else {
 			nextScreen = null;
 		}

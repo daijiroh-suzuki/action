@@ -2,14 +2,13 @@ package com.daijiroh.games.action.screen;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.daijiroh.games.action.controller.BasicController;
+import com.daijiroh.games.action.share.status.GameStatus;
 
-public class MenuScreen extends AbstractScreen {
+public class MenuScreen extends BaseScreen {
 
 	// === メニュー1 ===
 	/** メニュー名称 */
@@ -84,8 +83,7 @@ public class MenuScreen extends AbstractScreen {
 	 *
 	 * @param controller
 	 */
-	public MenuScreen(BasicController controller) {
-		super(controller);
+	public MenuScreen() {
 		select = 0;
 	}
 
@@ -96,25 +94,21 @@ public class MenuScreen extends AbstractScreen {
 	public void update() {
 
 		// Enterキー押下時
-		if (controller.isKeyEnter()) {
-			controller.setKeyEnter(false);
+		if (GameStatus.controller.isKeyEnter()) {
+			GameStatus.controller.setKeyEnter(false);
 			try {
 				// 遷移先画面を設定
 				Menu selectedMenu = MENU_LIST.get(select);
 				Class<?> clazz = Class.forName(selectedMenu.screen);
-				Class<?>[] types = { BasicController.class };
-				Constructor<?> constructor = clazz.getConstructor(types);
-
-				Object[] args = { this.controller };
-				nextScreen = (AbstractScreen)constructor.newInstance(args);
+				nextScreen = (BaseScreen)clazz.newInstance();
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		// 下方向キー押下時
-		} else if (controller.isKeyDown()) {
-			controller.setKeyDown(false);
+		} else if (GameStatus.controller.isKeyDown()) {
+			GameStatus.controller.setKeyDown(false);
 			if ((select + 1) > (MENU_LIST.size() - 1)) {
 				select = 0;
 			} else {
@@ -122,8 +116,8 @@ public class MenuScreen extends AbstractScreen {
 			}
 
 		// 上方向キー押下時
-		} else if (controller.isKeyUp()) {
-			controller.setKeyUp(false);
+		} else if (GameStatus.controller.isKeyUp()) {
+			GameStatus.controller.setKeyUp(false);
 			if ((select - 1) < 0) {
 				select = MENU_LIST.size() - 1;
 			} else {

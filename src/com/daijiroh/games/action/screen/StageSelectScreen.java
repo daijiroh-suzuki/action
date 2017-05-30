@@ -2,14 +2,13 @@ package com.daijiroh.games.action.screen;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.daijiroh.games.action.controller.BasicController;
+import com.daijiroh.games.action.share.status.GameStatus;
 
-public class StageSelectScreen extends AbstractScreen {
+public class StageSelectScreen extends BaseScreen {
 
 	// ==== ステージ1 ===
 	/** ステージ名称 */
@@ -194,8 +193,7 @@ public class StageSelectScreen extends AbstractScreen {
 	 *
 	 * @param controller
 	 */
-	public StageSelectScreen(BasicController controller) {
-		super(controller);
+	public StageSelectScreen() {
 		select = 0;
 	}
 
@@ -206,25 +204,21 @@ public class StageSelectScreen extends AbstractScreen {
 	public void update() {
 
 		// Enterキー押下時
-		if (controller.isKeyEnter()) {
-			controller.setKeyEnter(false);
+		if (GameStatus.controller.isKeyEnter()) {
+			GameStatus.controller.setKeyEnter(false);
 			try {
 				// 遷移先画面を設定
 				Stage stage = STAGE_LIST.get(select);
 				Class<?> clazz = Class.forName(stage.clazz);
-				Class<?>[] types = { BasicController.class };
-				Constructor<?> constructor = clazz.getConstructor(types);
-
-				Object[] args = { this.controller };
-				nextScreen = (AbstractScreen)constructor.newInstance(args);
+				nextScreen = (BaseScreen)clazz.newInstance();
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		// 右方向キー押下時
-		} else if (controller.isKeyRight()) {
-			controller.setKeyRight(false);
+		} else if (GameStatus.controller.isKeyRight()) {
+			GameStatus.controller.setKeyRight(false);
 			if ((select + 1) > (STAGE_LIST.size() - 1)) {
 				select = 0;
 			} else {
@@ -232,8 +226,8 @@ public class StageSelectScreen extends AbstractScreen {
 			}
 
 		// 左方向キー押下時
-		} else if (controller.isKeyLeft()) {
-			controller.setKeyLeft(false);
+		} else if (GameStatus.controller.isKeyLeft()) {
+			GameStatus.controller.setKeyLeft(false);
 			if ((select - 1) < 0) {
 				select = STAGE_LIST.size() - 1;
 			} else {
@@ -241,8 +235,8 @@ public class StageSelectScreen extends AbstractScreen {
 			}
 
 		// 上方向キー押下時
-		} else if (controller.isKeyUp()) {
-			controller.setKeyUp(false);
+		} else if (GameStatus.controller.isKeyUp()) {
+			GameStatus.controller.setKeyUp(false);
 			if ((select - 4) < 0) {
 				select += 4;
 			} else {
@@ -250,8 +244,8 @@ public class StageSelectScreen extends AbstractScreen {
 			}
 
 		// 下方向キー押下時
-		} else if (controller.isKeyDown()) {
-			controller.setKeyDown(false);
+		} else if (GameStatus.controller.isKeyDown()) {
+			GameStatus.controller.setKeyDown(false);
 			if ((select + 4) > (STAGE_LIST.size() - 1)) {
 				select -= 4;
 			} else {
