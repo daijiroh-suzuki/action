@@ -2,6 +2,9 @@ package com.daijiroh.games.action.task;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 import com.daijiroh.games.action.share.status.GameStatus;
 
@@ -23,6 +26,9 @@ public class Player extends Task {
 	/** 攻撃フラグ */
 	private boolean attack;
 
+	/** 画像イメージ */
+	private Image image;
+
 	/**
 	 * コンストラクタ
 	 *
@@ -43,6 +49,9 @@ public class Player extends Task {
 		this.height = 31;                     // 高さ
 		this.aerial = false;                  // 空中フラグ
 		this.attack = false;                  // 攻撃フラグ
+
+		// 画像をロード
+		loadImage();
 	}
 
 	/**
@@ -50,6 +59,10 @@ public class Player extends Task {
 	 */
 	@Override
 	public void update() {
+
+		// 座標を更新
+		x += vx;
+		y += vy;
 
 		// 右方向キー押下時
 		if (GameStatus.controller.isKeyRight()) {
@@ -67,6 +80,13 @@ public class Player extends Task {
 			aerial = true;
 		}
 
+		// Aボタン押下時
+		if (GameStatus.controller.isKeyA()) {
+			attack = true;
+		} else {
+			attack = false;
+		}
+
 		// 重力加速度
 		vy += 1;
 
@@ -75,10 +95,6 @@ public class Player extends Task {
 			y = 240;
 			aerial = false;
 		}
-
-		// 座標を更新
-		x += vx;
-		y += vy;
 	}
 
 	/**
@@ -87,12 +103,30 @@ public class Player extends Task {
 	@Override
 	public void draw(Graphics g) {
 
-		if (aerial) {
-			g.setColor(Color.RED);
+		if (aerial && attack) {
+			g.drawImage(image, x, y, x+width-1, y+height-1, 63, 63, 94-1, 94-1, new Color(254, 254, 254), null);
+		} else if (aerial) {
+			g.drawImage(image, x, y, x+width-1, y+height-1, 63, 63, 94-1, 94-1, new Color(254, 254, 254), null);
+		} else if (attack) {
+			g.drawImage(image, x, y, x+width-1, y+height-1, 94, 94, 125-1, 125-1, new Color(254, 254, 254), null);
 		} else {
-			g.setColor(Color.BLUE);
+			g.drawImage(image, x, y, x+width-1, y+height-1, 0, 0, 31-1, 31-1, new Color(254, 254, 254), null);
 		}
-		g.fillRect(x, y, width, height);
+
+//		if (aerial) {
+//			g.setColor(Color.RED);
+//		} else {
+//			g.setColor(Color.BLUE);
+//		}
+//		g.fillRect(x, y, width, height);
+	}
+
+	/**
+	 * 画像をロードする
+	 */
+	private void loadImage() {
+		ImageIcon icon = new ImageIcon(getClass().getResource("image/player.gif"));
+		image = icon.getImage();
 	}
 
 	/**
