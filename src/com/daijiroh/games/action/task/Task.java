@@ -14,6 +14,8 @@ public abstract class Task {
 	protected static final int CATEGORY_ENEMY_ATTACK = 3;
 	/** カテゴリー：ステージ */
 	protected static final int CATEGORY_STAGE = 4;
+	/** カテゴリー：その他 */
+	protected static final int CATEGORY_OTHER = 99;
 
 	/** 優先度 */
 	protected float priority = 1.0f;

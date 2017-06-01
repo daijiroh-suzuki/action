@@ -2,6 +2,8 @@ package com.daijiroh.games.action.screen;
 
 import java.awt.Graphics;
 
+import com.daijiroh.games.action.share.util.DebugUtil;
+import com.daijiroh.games.action.task.DebugPanel;
 import com.daijiroh.games.action.task.Player;
 import com.daijiroh.games.action.task.TaskList;
 
@@ -14,13 +16,16 @@ public class TestStageScreen extends BaseScreen {
 	 */
 	public TestStageScreen() {
 
-		// プレイヤーを生成
-		Player player = new Player(320, 240);
-
 		// タスクリストを初期化
 		TaskList.init();
-		// タスクリストに追加
-		TaskList.add(player);
+
+		// タスクリストにプレイヤーを追加
+		TaskList.add(new Player(320, 240));
+
+		// タスクリストにデバックパネルを追加
+		if (DebugUtil.isDebugMode()) {
+			TaskList.add(new DebugPanel());
+		}
 	}
 
 	/**

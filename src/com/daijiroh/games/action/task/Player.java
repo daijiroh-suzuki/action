@@ -33,6 +33,9 @@ public class Player extends Task {
 	/** 画像イメージ */
 	private Image image;
 
+	/** フレームカウント */
+	private int frameCount;
+
 	/**
 	 * コンストラクタ
 	 *
@@ -64,6 +67,9 @@ public class Player extends Task {
 	 */
 	@Override
 	public void update() {
+
+		// フレームカウント更新
+		frameCount++;
 
 		// 座標を更新
 		x += vx;
@@ -114,25 +120,40 @@ public class Player extends Task {
 		int frm = 0;
 		int action = 0;
 
-		if (aerial && attack) {  // ジャンプ攻撃中
+		if (aerial && attack) {       // ジャンプ攻撃中
+			action = 5;
+		} else if (aerial) {          // ジャンプ中
 			action = 2;
-		} else if (aerial) {     // ジャンプ中
-			action = 2;
-		} else if (move) {       // 移動中
+		} else if (move && attack) {  // 移動攻撃中
+			action = 4;
+			if (frameCount % 50 == 0) {
+				if (++frm >= 3) {
+					frm = 0;
+				}
+			}
+		} else if (move) {            // 移動中
 			action = 1;
-		} else if (attack) {     // 攻撃中
+			if (frameCount % 50 == 0) {
+				if (++frm >= 3) {
+					frm = 0;
+				}
+			}
+			frm = (frameCount % 50) % 3;
+		} else if (attack) {          // 攻撃中
 			action = 3;
-		} else {                 // 停止中
+		} else {                      // 停止中
 			action = 0;
 		}
 
 		g.drawImage(
-				image,
-				x, y,
-				x + (width  - 1), y + (height - 1),
-				IMAGE_SIZE * frm,
-				IMAGE_SIZE * action,
-				IMAGE_SIZE * frm + (IMAGE_SIZE - 1),
+				image,                // 画像イメージ
+				x,                    // 描画位置：左上x座標
+				y,                    // 描画位置：左上y座標
+				x + (width  - 1),     // 描画位置：右下x座標
+				y + (height - 1),     // 描画位置：右下y座標
+				IMAGE_SIZE * frm,     // 画像ソース：左上x座標
+				IMAGE_SIZE * action,  // 
+				IMAGE_SIZE * frm    + (IMAGE_SIZE - 1),
 				IMAGE_SIZE * action + (IMAGE_SIZE - 1),
 				null);
 
@@ -231,7 +252,7 @@ public class Player extends Task {
 	/**
 	 * 幅を取得する
 	 *
- * @return
+	 * @return
 	 */
 	public int getWidth() {
 		return width;

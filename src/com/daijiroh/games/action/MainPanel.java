@@ -19,6 +19,9 @@ public class MainPanel extends JPanel implements Runnable {
 	/** パネルの高さ */
 	private static final int HEIGHT = 480;
 
+	/** 1フレームで使える時間(ナノ秒) */
+	private static final long PERIOD = 20 * 1000000L;
+
 	/** ダブルバッファリング用 Graphics */
 	private Graphics dbg;
 	/** ダブルバッファリング用 Image */
@@ -29,6 +32,9 @@ public class MainPanel extends JPanel implements Runnable {
 
 	/** 画面オブジェクト */
 	private BaseScreen screen;
+
+//	/** フレームカウント */
+//	private long frameCount = 0L;
 
 	/**
 	 * コンストラクタ
@@ -54,23 +60,53 @@ public class MainPanel extends JPanel implements Runnable {
 	@Override
 	public void run() {
 
+		long beforeTime, afterTime, timeDiff, sleepTime;
+		long overSleepTime = 0L;
+		int noDelays = 0;
+
 		// タイトル画面を生成
 		screen = new TitleScreen();
 
-		while (true) {
-			// ゲーム状態を更新
-			gameUpdate();
-			// バッファにレンダリング
-			gameRender();
-			// バッファを画面に描画
-			printScreen();
+		// 状態更新・レンダリング前の時間を取得
+		beforeTime = System.nanoTime();
 
-			// 休止
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		while (true) {
+			gameUpdate();   // ゲーム状態を更新
+			gameRender();   // バッファにレンダリング
+			printScreen();  // バッファを画面に描画
+
+			// 状態更新・レンダリング後の時間を取得
+			afterTime = System.nanoTime();
+			// 状態更新・レンダリング時間を計算
+			timeDiff = afterTime - beforeTime;
+
+			// 前回のフレーム休止時間誤差を引く
+			sleepTime = (PERIOD - timeDiff) - overSleepTime;
+
+			if (sleepTime > 0) {
+				// 休止時間がとれる場合
+				try {
+					Thread.sleep(sleepTime / 1000000L);  // nano->ms
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				// sleep()の誤差
+				overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
+
+			} else {
+				// 状態更新・レンダリングで時間を使い切ってしまい
+				// 休止時間がとれない場合
+				overSleepTime = 0L;
+				// 休止なしが16回以上続いたら
+				if (++noDelays >= 16) {
+					Thread.yield();  // 他スレッドにCPUを譲る
+					noDelays = 0;
+				}
 			}
+			// 状態更新・レンダリング前の時間を取得
+			beforeTime = System.nanoTime();
+
+			// FPSを計算
 		}
 	}
 
@@ -134,4 +170,10 @@ public class MainPanel extends JPanel implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+//	private void calcFPS() {
+//
+//		frameCount++;
+//
+//	}
 }
