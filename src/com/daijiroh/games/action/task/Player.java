@@ -1,6 +1,5 @@
 package com.daijiroh.games.action.task;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -9,6 +8,9 @@ import javax.swing.ImageIcon;
 import com.daijiroh.games.action.share.status.GameStatus;
 
 public class Player extends Task {
+
+	/** 画像イメージサイズ */
+	private final int IMAGE_SIZE = 31;
 
 	/** x, y座標 */
 	private int x, y;
@@ -25,6 +27,8 @@ public class Player extends Task {
 	private boolean aerial;
 	/** 攻撃フラグ */
 	private boolean attack;
+	/** 移動フラグ */
+	private boolean move;
 
 	/** 画像イメージ */
 	private Image image;
@@ -45,10 +49,11 @@ public class Player extends Task {
 		this.y = y;                           // y座標
 		this.vx = 0;                          // x方向速度
 		this.vy = 0;                          // y方向速度
-		this.width = 31;                      // 幅
-		this.height = 31;                     // 高さ
+		this.width = IMAGE_SIZE;              // 幅
+		this.height = IMAGE_SIZE;             // 高さ
 		this.aerial = false;                  // 空中フラグ
 		this.attack = false;                  // 攻撃フラグ
+		this.move = false;                    // 移動フラグ
 
 		// 画像をロード
 		loadImage();
@@ -67,15 +72,18 @@ public class Player extends Task {
 		// 右方向キー押下時
 		if (GameStatus.controller.isKeyRight()) {
 			vx = 3;
+			move = true;
 		// 左方向キー押下時
 		} else if (GameStatus.controller.isKeyLeft()) {
 			vx = -3;
+			move = true;
 		} else {
 			vx = 0;
+			move = false;
 		}
 
 		// Bボタン押下時
-		if (GameStatus.controller.isKeyB()) {
+		if (GameStatus.controller.isKeyB() && !aerial) {
 			vy = -10;
 			aerial = true;
 		}
@@ -103,15 +111,30 @@ public class Player extends Task {
 	@Override
 	public void draw(Graphics g) {
 
-		if (aerial && attack) {
-			g.drawImage(image, x, y, x+width-1, y+height-1, 63, 63, 94-1, 94-1, new Color(254, 254, 254), null);
-		} else if (aerial) {
-			g.drawImage(image, x, y, x+width-1, y+height-1, 63, 63, 94-1, 94-1, new Color(254, 254, 254), null);
-		} else if (attack) {
-			g.drawImage(image, x, y, x+width-1, y+height-1, 94, 94, 125-1, 125-1, new Color(254, 254, 254), null);
-		} else {
-			g.drawImage(image, x, y, x+width-1, y+height-1, 0, 0, 31-1, 31-1, new Color(254, 254, 254), null);
+		int frm = 0;
+		int action = 0;
+
+		if (aerial && attack) {  // ジャンプ攻撃中
+			action = 2;
+		} else if (aerial) {     // ジャンプ中
+			action = 2;
+		} else if (move) {       // 移動中
+			action = 1;
+		} else if (attack) {     // 攻撃中
+			action = 3;
+		} else {                 // 停止中
+			action = 0;
 		}
+
+		g.drawImage(
+				image,
+				x, y,
+				x + (width  - 1), y + (height - 1),
+				IMAGE_SIZE * frm,
+				IMAGE_SIZE * action,
+				IMAGE_SIZE * frm + (IMAGE_SIZE - 1),
+				IMAGE_SIZE * action + (IMAGE_SIZE - 1),
+				null);
 
 //		if (aerial) {
 //			g.setColor(Color.RED);
@@ -208,7 +231,7 @@ public class Player extends Task {
 	/**
 	 * 幅を取得する
 	 *
-	 * @return
+ * @return
 	 */
 	public int getWidth() {
 		return width;
@@ -229,39 +252,5 @@ public class Player extends Task {
 	 */
 	public int getHeight() {
 		return height;
-	}
-
-	/**
-	 * 空中フラグを設定する
-	 *
-	 * @param aerial
-	 */
-	public void setAerial(boolean aerial) {
-		this.aerial = aerial;
-	}
-	/**
-	 * 空中フラグを取得する
-	 *
-	 * @return
-	 */
-	public boolean isAerial() {
-		return aerial;
-	}
-
-	/**
-	 * 攻撃フラグを設定する
-	 *
-	 * @param attack
-	 */
-	public void setAttack(boolean attack) {
-		this.attack = attack;
-	}
-	/**
-	 * 攻撃フラグを取得する
-	 *
-	 * @return
-	 */
-	public boolean isAttack() {
-		return attack;
 	}
 }
