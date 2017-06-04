@@ -52,8 +52,8 @@ public class Player extends Task {
 		this.y = y;                           // y座標
 		this.vx = 0;                          // x方向速度
 		this.vy = 0;                          // y方向速度
-		this.width = IMAGE_SIZE;              // 幅
-		this.height = IMAGE_SIZE;             // 高さ
+		this.width = IMAGE_SIZE * 2;          // 幅
+		this.height = IMAGE_SIZE * 2;         // 高さ
 		this.aerial = false;                  // 空中フラグ
 		this.attack = false;                  // 攻撃フラグ
 		this.move = false;                    // 移動フラグ
@@ -126,19 +126,10 @@ public class Player extends Task {
 			action = 2;
 		} else if (move && attack) {  // 移動攻撃中
 			action = 4;
-			if (frameCount % 50 == 0) {
-				if (++frm >= 3) {
-					frm = 0;
-				}
-			}
+			frm = (frameCount / 5) % 4;
 		} else if (move) {            // 移動中
 			action = 1;
-			if (frameCount % 50 == 0) {
-				if (++frm >= 3) {
-					frm = 0;
-				}
-			}
-			frm = (frameCount % 50) % 3;
+			frm = (frameCount / 5) % 4;
 		} else if (attack) {          // 攻撃中
 			action = 3;
 		} else {                      // 停止中
@@ -146,15 +137,15 @@ public class Player extends Task {
 		}
 
 		g.drawImage(
-				image,                // 画像イメージ
-				x,                    // 描画位置：左上x座標
-				y,                    // 描画位置：左上y座標
-				x + (width  - 1),     // 描画位置：右下x座標
-				y + (height - 1),     // 描画位置：右下y座標
-				IMAGE_SIZE * frm,     // 画像ソース：左上x座標
-				IMAGE_SIZE * action,  // 
-				IMAGE_SIZE * frm    + (IMAGE_SIZE - 1),
-				IMAGE_SIZE * action + (IMAGE_SIZE - 1),
+				image,                            // 画像イメージ
+				x,                                // 描画位置：左上x座標
+				y,                                // 描画位置：左上y座標
+				x + width,                        // 描画位置：右下x座標
+				y + height,                       // 描画位置：右下y座標
+				IMAGE_SIZE * frm,                 // 画像ソース：左上x座標
+				IMAGE_SIZE * action,              // 画像ソース：左上y座標
+				IMAGE_SIZE * frm    + IMAGE_SIZE, // 画像ソース：右下x座標
+				IMAGE_SIZE * action + IMAGE_SIZE, // 画像ソース：右下y座標
 				null);
 
 //		if (aerial) {
