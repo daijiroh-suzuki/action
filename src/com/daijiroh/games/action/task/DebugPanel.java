@@ -3,6 +3,8 @@ package com.daijiroh.games.action.task;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import com.daijiroh.games.action.share.status.GameStatus;
+
 public class DebugPanel extends Task {
 
 	/** x, y座標 */
@@ -45,6 +47,58 @@ public class DebugPanel extends Task {
 
 		g.setColor(Color.BLACK);
 		g.fillRect(x, y, width, height);
+
+		if (GameStatus.controller.isKeyUp()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("↑", x+5+30, y+15);
+
+		if (GameStatus.controller.isKeyRight()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("→", x+5+60, y+15+30);
+
+		if (GameStatus.controller.isKeyDown()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("↓", x+5+30, y+15+60);
+
+		if (GameStatus.controller.isKeyLeft()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("←", x+5, y+15+30);
+
+		if (GameStatus.controller.isKeyA()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("A", x+60, y+15);
+
+		if (GameStatus.controller.isKeyB()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("B", x+80, y+15);
+
+		if (GameStatus.controller.isKeyEnter()) {
+			g.setColor(Color.GREEN);
+		} else {
+			g.setColor(Color.WHITE);
+		}
+		g.drawString("Enter", x+100, y+15);
+
+		g.setColor(Color.WHITE);
+		g.drawString(String.valueOf(GameStatus.actualFPS), x+5, y+15+80);
 	}
 
 }

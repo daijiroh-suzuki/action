@@ -3,8 +3,6 @@ package com.daijiroh.games.action.controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import com.daijiroh.games.action.share.util.DebugUtil;
-
 public class BasicController implements KeyListener {
 
 	/** 上方向キーフラグ */
@@ -31,31 +29,31 @@ public class BasicController implements KeyListener {
 		// 押されたキーのフラグをオンにする
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			DebugUtil.println("上方向キーが押されました。");
+//			DebugUtil.println("上方向キーが押されました。");
 			keyUp = true;
 			break;
 		case KeyEvent.VK_DOWN:
-			DebugUtil.println("下方向キーが押されました。");
+//			DebugUtil.println("下方向キーが押されました。");
 			keyDown = true;
 			break;
 		case KeyEvent.VK_RIGHT:
-			DebugUtil.println("右方向キーが押されました。");
+//			DebugUtil.println("右方向キーが押されました。");
 			keyRight = true;
 			break;
 		case KeyEvent.VK_LEFT:
-			DebugUtil.println("左方向キーが押されました。");
+//			DebugUtil.println("左方向キーが押されました。");
 			keyLeft = true;
 			break;
 		case KeyEvent.VK_ENTER:
-			DebugUtil.println("Enterキーが押されました。");
+//			DebugUtil.println("Enterキーが押されました。");
 			keyEnter = true;
 			break;
 		case KeyEvent.VK_A:
-			DebugUtil.println("Aボタンキーが押されました。");
+//			DebugUtil.println("Aボタンキーが押されました。");
 			keyA = true;
 			break;
 		case KeyEvent.VK_B:
-			DebugUtil.println("Bボタンキーが押されました。");
+//			DebugUtil.println("Bボタンキーが押されました。");
 			keyB = true;
 			break;
 		}
@@ -70,31 +68,31 @@ public class BasicController implements KeyListener {
 		// 離されたキーのフラグをオフにする
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			DebugUtil.println("上方向キーが離されました。");
+//			DebugUtil.println("上方向キーが離されました。");
 			keyUp = false;
 			break;
 		case KeyEvent.VK_DOWN:
-			DebugUtil.println("下方向キーが離されました。");
+//			DebugUtil.println("下方向キーが離されました。");
 			keyDown = false;
 			break;
 		case KeyEvent.VK_RIGHT:
-			DebugUtil.println("右方向キーが離されました。");
+//			DebugUtil.println("右方向キーが離されました。");
 			keyRight = false;
 			break;
 		case KeyEvent.VK_LEFT:
-			DebugUtil.println("左方向キーが離されました。");
+//			DebugUtil.println("左方向キーが離されました。");
 			keyLeft = false;
 			break;
 		case KeyEvent.VK_ENTER:
-			DebugUtil.println("Enterキーが離されました。");
+//			DebugUtil.println("Enterキーが離されました。");
 			keyEnter = false;
 			break;
 		case KeyEvent.VK_A:
-			DebugUtil.println("Aボタンキーが離されました。");
+//			DebugUtil.println("Aボタンキーが離されました。");
 			keyA = false;
 			break;
 		case KeyEvent.VK_B:
-			DebugUtil.println("Bボタンキーが離されました。");
+//			DebugUtil.println("Bボタンキーが離されました。");
 			keyB = false;
 			break;
 		}

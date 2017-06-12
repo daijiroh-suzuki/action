@@ -7,6 +7,9 @@ public class GameStatus {
 	/** コントローラー */
 	public static BasicController controller;
 
+	/** 1秒ごとの処理フレーム数 */
+	public static double actualFPS;
+
 	static {
 		controller = new BasicController();
 	}

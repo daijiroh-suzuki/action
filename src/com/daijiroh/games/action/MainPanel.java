@@ -21,6 +21,8 @@ public class MainPanel extends JPanel implements Runnable {
 
 	/** 1フレームで使える時間(ナノ秒) */
 	private static final long PERIOD = 20 * 1000000L;
+	/** FPS計算間隔(ナノ秒) */
+	private static final long MAX_STATS_INTERVAL = 1000000000L;
 
 	/** ダブルバッファリング用 Graphics */
 	private Graphics dbg;
@@ -33,8 +35,12 @@ public class MainPanel extends JPanel implements Runnable {
 	/** 画面オブジェクト */
 	private BaseScreen screen;
 
-//	/** フレームカウント */
-//	private long frameCount = 0L;
+	/** フレームカウント */
+	private long frameCount = 0L;
+	/** FPS再計算までの累計時間(ナノ秒) */
+	private long calcInterval = 0L;
+	/** 前回FPS計算時間(ナノ秒) */
+	private long prevCalcTime = 0L;
 
 	/**
 	 * コンストラクタ
@@ -69,6 +75,7 @@ public class MainPanel extends JPanel implements Runnable {
 
 		// 状態更新・レンダリング前の時間を取得
 		beforeTime = System.nanoTime();
+		prevCalcTime = beforeTime;
 
 		while (true) {
 			gameUpdate();   // ゲーム状態を更新
@@ -107,6 +114,7 @@ public class MainPanel extends JPanel implements Runnable {
 			beforeTime = System.nanoTime();
 
 			// FPSを計算
+			calcFPS();
 		}
 	}
 
@@ -171,9 +179,23 @@ public class MainPanel extends JPanel implements Runnable {
 		}
 	}
 
-//	private void calcFPS() {
-//
-//		frameCount++;
-//
-//	}
+	private void calcFPS() {
+		frameCount++;
+		calcInterval += PERIOD;
+
+		// 1秒おきにFPSを再計算する
+		if (calcInterval >= MAX_STATS_INTERVAL) {
+			long timeNow = System.nanoTime();
+			// 実際の経過時間を測定
+			long realElapsedTime = timeNow - prevCalcTime;
+
+			// FPSを計算
+			// realElapsedTimeの単位はナノ秒なので秒に変換する
+			GameStatus.actualFPS = ((double) frameCount / realElapsedTime) * 1000000000L;
+
+			frameCount = 0L;
+			calcInterval = 0L;
+			prevCalcTime = timeNow;
+		}
+	}
 }
